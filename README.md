@@ -1,5 +1,7 @@
 # GNE网页信息提取接口
 
+[原gne项目地址](https://github.com/kingname/GeneralNewsExtractor/projects/1)
+
 ## 环境配置
 
 **python3.7+**
