@@ -39,7 +39,7 @@ def parse_from_html(
 class SuccessfulTempItem(BaseModel):
     errCode: int = Body(0, description='错误状态码，值为0时表示请求成功')
     errMsg: str = Body(None, description='请求错误信息')
-    result: str = Body(None, description='请求结果')
+    result: dict = Body(None, description='请求结果')
 
 
 class Item(BaseModel):
@@ -53,14 +53,14 @@ class Item(BaseModel):
     with_body_html: bool = Body(True, description='是否提取正文html')
 
 
-@app.post('/gne/parse', response_model=SuccessfulTempItem)
+@app.post('/gne/parse', response_model=SuccessfulTempItem, tags=['解析接口'])
 async def parse(item: Item):
     """提取html中的信息"""
     if not item.html:
         return {'errCode:': 1, 'errMsg': '缺少html参数', 'result': None}
     try:
         html = item.html.encode('ISO-8859-1').decode()
-    except UnicodeEncodeError:
+    except (UnicodeEncodeError, UnicodeDecodeError):
         html = item.html
     try:
         result = parse_from_html(
